@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id='app'>
+        <h3 v-bind:title="title">{{title}}</h3>
+        <ul>
+            <li v-for="(item, idx) in todoList">
+                <b v-if='item.status' v-on:click="showStatus(idx)">{{item.text}}</b>
+                <span v-else v-on:click="showStatus(idx)">{{item.text}}</span>
+            </li>
+            <todo-item v-for="(item, idx) in todoList" v-bind:todo='item' v-bind:key='item+idx'></todo-item>
+        </ul>
+    </div>
+</body>
+
+<script>
+    Vue.component('todo-item', {
+        props: ['todo'],
+        data: function () {
+            return { todoData: this.todo }
+        },
+        template: '<li v-on:click="changeStatus()">{{todo.text}} {{todo.status}}</li>',
+        methods: {
+            changeStatus: function () {
+                this.todoData.status = !this.todoData.status;
+            }
+        }
+    });
+
+    const app = new Vue({
+        el: '#app',
+        data: {
+            title: 'Todo app with vue',
+            todoList: [
+                { text: 'hoc vuejs', status: true },
+                { text: 'hoc vuex', status: false },
+                { text: 'hoc vue router', status: true }
+            ]
+        },
+        methods: {
+            showStatus: function (i = 0) {
+                alert(this.todoList[i].status);
+            },
+        }
+    });
+    setTimeout(() => {
+        app.todoList.push({ text: 'hoc them vue linh tinh', status: false });
+    }, 2000);
+</script>
+
+</html>
